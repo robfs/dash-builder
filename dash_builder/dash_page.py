@@ -1,7 +1,7 @@
 import abc
+import traceback
 
 from dash import html
-import traceback
 
 __all__ = ["DashPage"]
 

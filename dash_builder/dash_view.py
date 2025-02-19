@@ -1,9 +1,9 @@
+import abc
 import re
 import typing
-import abc
 
+from dash import ALL, MATCH
 from dash.dependencies import _Wildcard
-from dash import MATCH, ALL
 
 __all__ = ["DashView"]
 

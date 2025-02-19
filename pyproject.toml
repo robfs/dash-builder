@@ -1,9 +1,15 @@
 [project]
 name = "dash-builder"
 version = "0.1.0"
-description = "Add your description here"
+description = "A tool and framework to simplify construction of Python Dash applications."
 readme = "README.md"
+authors = [{ name = "robfs", email = "robfoxsimms@gmail.com" }]
 requires-python = ">=3.11"
-dependencies = [
-    "dash>=2.18.2",
-]
+dependencies = ["dash>=2.18.2"]
+
+[project.scripts]
+dash-builder = "dash_builder:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

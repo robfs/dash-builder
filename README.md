@@ -1,6 +1,6 @@
 # dash-builder
 
-A tool to simplify construction of Python Dash applications.
+A tool and framework to simplify construction of Python Dash applications.
 
 ## Installation
 
@@ -8,8 +8,12 @@ A tool to simplify construction of Python Dash applications.
 
 ## Usage
 
-`dash-builder` leverages existing funcionality from the Dash ecosystem to define a high-level framework that simplifies the construction of complex dashboards.
+`dash-builder` implements defines 2x classes to be used when building apps:
 
+* `DashPage` - all page modules should define a page object that inherits from this abstract base class.
+* `DashView` - all page components should be constructed as views that inerhit from this abstract base class.
+
+## Framework
 Under this framework:
 
 * Applications are composed of pages using Dash's multi-page settings.
@@ -49,7 +53,7 @@ app.layout = html.Div(
     ]
 )
 
-if __name__ == "__main__:
+if __name__ == "__main__":
     app.run(debug=True)
 ```
 
@@ -63,11 +67,13 @@ from dash_builder import DashPage
 from views import DemoView, DemoView2, DemoInput, DemoOutput
 
 
+dash.register_page(__name__, path="/")
+
 class HomePage(DashPage):
     @classmethod
     def valid_layout(cls, **kwargs):
         one = DemoView.create("one")
-        two = DemoView,create("two")
+        two = DemoView.create("two")
         three = DemoView2.create("three")
         return html.Div([one, two, three])
 

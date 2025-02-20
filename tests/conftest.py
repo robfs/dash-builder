@@ -1,5 +1,4 @@
 import pytest
-
 from typer.testing import CliRunner
 
 from src.dash_builder import DashView

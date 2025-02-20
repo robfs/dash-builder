@@ -26,10 +26,10 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
-      - name: "Set up Python"
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: "pyproject.toml"
+          python-version-file: ".python-version"
 
       - name: Build release distributions
         run: |
@@ -47,9 +47,9 @@ jobs:
     needs:
       - release-build
 
-    permissions:
-      # IMPORTANT: this permission is mandatory for trusted publishing
-      id-token: write
+      permissions:
+        # IMPORTANT: this permission is mandatory for trusted publishing
+        id-token: write
 
     # Dedicated environments with protections for publishing are strongly recommended.
     environment:
@@ -64,5 +64,5 @@ jobs:
           name: release-dists
           path: dist/
 
-      # - name: Publish release distributions to PyPI
-      #   uses: pypa/gh-action-pypi-publish@6f7e8d9c0b1a2c3d4e5f6a7b8c9d0e1f2a3b4c5d
+      - name: Publish release distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@6f7e8d9c0b1a2c3d4e5f6a7b8c9d0e1f2a3b4c5d

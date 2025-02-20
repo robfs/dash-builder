@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "A tool and framework to simplify construction of Python Dash applications."
 readme = "README.md"
 authors = [{ name = "robfs", email = "robfoxsimms@gmail.com" }]
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
     "dash>=2.18.2",
     "typer>=0.15.1",

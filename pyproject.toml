@@ -5,10 +5,13 @@ description = "A tool and framework to simplify construction of Python Dash appl
 readme = "README.md"
 authors = [{ name = "robfs", email = "robfoxsimms@gmail.com" }]
 requires-python = ">=3.11"
-dependencies = ["dash>=2.18.2"]
+dependencies = [
+    "dash>=2.18.2",
+    "typer>=0.15.1",
+]
 
 [project.scripts]
-dash-builder = "dash_builder:main"
+dash-builder = "dash_builder.main:app"
 
 [build-system]
 requires = ["hatchling"]

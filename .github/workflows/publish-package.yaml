@@ -28,8 +28,11 @@ jobs:
 
       - name: Install uv and set the python version
         uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          uv-file: ".python-version"
+          python-version-file: ".python-version"
 
   #     - name: Build release distributions
   #       run: |

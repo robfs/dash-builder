@@ -27,6 +27,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Run ruff format
+        uses: astral-sh/ruff-action@v3
+        with:
+          args: format
+          src: "./src"
+
+      - name: Run ruff with fix
+        uses: astral-sh/ruff-action@v3
+        with:
+          args: check --fix
+          src: "./src"
+
       - name: Install uv and set the python version
         uses: astral-sh/setup-uv@v5
         with:

@@ -13,3 +13,7 @@ dash-builder = "dash_builder:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"

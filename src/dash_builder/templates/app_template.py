@@ -1,3 +1,8 @@
+"""Module containing the template for app.py."""
+
+__all__ = ["AppTemplate"]
+
+
 class AppTemplate:
     @staticmethod
     def content() -> str:

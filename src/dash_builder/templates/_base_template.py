@@ -2,13 +2,12 @@
 
 import abc
 
-
 __all__ = ["BaseTemplate"]
 
 
 class BaseTemplate(abc.ABC):
-    @abc.abstractmethod
     @classmethod
+    @abc.abstractmethod
     def content_list(cls) -> list[str]:
         raise NotImplementedError
 

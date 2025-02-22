@@ -6,16 +6,16 @@ __all__ = ["AppTemplate"]
 
 
 class AppTemplate(BaseTemplate):
-    @classmethod
-    def imports(cls) -> str:
+    @staticmethod
+    def imports() -> str:
         return "import dash\n"
 
-    @classmethod
-    def body(cls) -> str:
+    @staticmethod
+    def body() -> str:
         return "app: dash.Dash = dash.Dash(__name__, use_pages=True)"
 
-    @classmethod
-    def main(cls) -> str:
+    @staticmethod
+    def main() -> str:
         return 'if __name__ == "__main__":\n\tapp.run(debug=True)\n'
 
     @classmethod

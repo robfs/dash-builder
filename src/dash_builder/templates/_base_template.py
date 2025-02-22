@@ -6,6 +6,10 @@ __all__ = ["BaseTemplate"]
 
 
 class BaseTemplate(abc.ABC):
+    @staticmethod
+    def page_imports() -> str:
+        return "import dash\nfrom dash_builder import DashPage, DashView\n"
+
     @classmethod
     @abc.abstractmethod
     def content_list(cls) -> list[str]:

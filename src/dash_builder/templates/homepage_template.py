@@ -2,7 +2,6 @@
 
 from ._base_template import BaseTemplate
 
-
 __all__ = ["HomepageTemplate"]
 
 

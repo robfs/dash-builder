@@ -1,7 +1,7 @@
 import pytest
 from typer.testing import CliRunner
 
-from src.dash_builder import DashView, DashPage
+from src.dash_builder import DashPage, DashView
 
 
 @pytest.fixture()

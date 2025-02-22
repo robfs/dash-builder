@@ -1,9 +1,11 @@
 """Module containing the template for app.py."""
 
+from ._base_template import BaseTemplate
+
 __all__ = ["AppTemplate"]
 
 
-class AppTemplate:
+class AppTemplate(BaseTemplate):
     @classmethod
     def imports(cls) -> str:
         return "import dash\n"
@@ -19,7 +21,3 @@ class AppTemplate:
     @classmethod
     def content_list(cls) -> list[str]:
         return [cls.imports(), cls.body(), cls.main()]
-
-    @classmethod
-    def content(cls) -> str:
-        return "\n\n".join(cls.content_list())

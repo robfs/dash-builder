@@ -1,11 +1,15 @@
 import os
+import pathlib
 import time
 import typing
 from pathlib import Path
 
 import typer
 from rich.console import Console
+from rich.markup import escape
 from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.text import Text
+from rich.tree import Tree
 
 from .templates import AppTemplate, HomepageTemplate
 
@@ -44,7 +48,7 @@ class ProjectInitiator:
             f"[bold green]{self.project}[/bold green] successfully created."
         )
 
-    def check_if_app_exists(self):
+    def check_if_app_exists(self) -> bool:
         if self.app.exists():
             warning = "[bold red]FAILED[/bold red]"
             warning += (
@@ -52,6 +56,8 @@ class ProjectInitiator:
             )
             warning += "\nPlease remove or rename this file and try again."
             self.console.print(warning)
+            return True
+        return False
 
     def create_file(self, path: Path, template: "type[BaseTemplate]"):
         if not path.exists():
@@ -62,18 +68,62 @@ class ProjectInitiator:
         if not path.exists():
             os.mkdir(path)
 
+    def TEMP_REMOVE_PROJECT(self):
+        if self.project.exists():
+            import shutil
+
+            self.console.print(f"[bold red]DELETING {self.project}[/bold red]")
+            shutil.rmtree(self.project)
+
+    def walk_directory(self, directory: pathlib.Path, tree: Tree) -> None:
+        """Recursively build a Tree with directory contents."""
+        # Sort dirs first then by filename
+        paths = sorted(
+            directory.iterdir(),
+            key=lambda path: (path.is_file(), path.name.lower()),
+        )
+        for path in paths:
+            # Remove hidden files
+            if path.name.startswith("."):
+                continue
+            if path.is_dir():
+                style = "dim" if path.name.startswith("__") else ""
+                branch = tree.add(
+                    f"[bold magenta]:open_file_folder: [link file://{path}]{escape(path.name)}",
+                    style=style,
+                    guide_style=style,
+                )
+                self.walk_directory(path, branch)
+            else:
+                text_filename = Text(path.name, "blue")
+                tree.add(text_filename)
+
+    def print_tree(self, path: Path):
+        tree = Tree(
+            f":open_file_folder: [link file://{path}][bold green]{path}[/bold green]"
+        )
+        self.walk_directory(path, tree)
+        self.console.print(tree)
+
     def run(self):
+        self.TEMP_REMOVE_PROJECT()
         self.print_initiation()
-        self.check_if_app_exists()
+        already_exists = self.check_if_app_exists()
+        if already_exists:
+            return None
         with self.spinner(transient=True, console=self.console) as progress:
             progress.add_task("Creating project directory...")
+            time.sleep(1)
             self.create_directory(self.project)
             progress.add_task("Creating app.py file...")
+            time.sleep(1)
             self.create_file(self.app, AppTemplate)
             progress.add_task("Creating pages...")
+            time.sleep(1)
             self.create_directory(self.pages)
             self.create_file(self.home, HomepageTemplate)
         self.print_completion()
+        self.print_tree(self.project)
 
 
 @app.command("init-project")

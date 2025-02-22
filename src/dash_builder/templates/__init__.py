@@ -1,3 +1,4 @@
 from .app_template import AppTemplate
+from .homepage_template import HomepageTemplate
 
-__all__ = ["AppTemplate"]
+__all__ = ["AppTemplate", "HomepageTemplate"]

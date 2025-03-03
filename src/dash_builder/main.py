@@ -11,7 +11,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.text import Text
 from rich.tree import Tree
 
-from .templates import AppTemplate, HomepageTemplate
+from .templates import AppTemplate, HomepageTemplate, NotFound404Template
 
 if typing.TYPE_CHECKING:
     from .templates._base_template import BaseTemplate
@@ -32,6 +32,7 @@ class ProjectInitiator:
 
         self.pages = self.project / "pages"
         self.home = self.pages / "home.py"
+        self.not_found_404 = self.pages / "not_found_404.py"
 
     def spinner(self, **kwargs):
         fmt: str = "[progress.description]{task.description}"
@@ -113,15 +114,13 @@ class ProjectInitiator:
             return None
         with self.spinner(transient=True, console=self.console) as progress:
             progress.add_task("Creating project directory...")
-            time.sleep(1)
             self.create_directory(self.project)
             progress.add_task("Creating app.py file...")
-            time.sleep(1)
             self.create_file(self.app, AppTemplate)
             progress.add_task("Creating pages...")
-            time.sleep(1)
             self.create_directory(self.pages)
             self.create_file(self.home, HomepageTemplate)
+            self.create_file(self.not_found_404, NotFound404Template)
         self.print_completion()
         self.print_tree(self.project)
 

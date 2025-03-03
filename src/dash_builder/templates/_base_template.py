@@ -2,7 +2,6 @@
 
 import abc
 
-
 __all__ = ["BaseTemplate"]
 
 

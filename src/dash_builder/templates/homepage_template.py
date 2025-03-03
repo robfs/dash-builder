@@ -6,6 +6,9 @@ __all__ = ["HomepageTemplate"]
 
 
 class HomepageTemplate(BaseTemplate):
+    _dash_builder_imports = ["DashPage"]
+
     @classmethod
     def content_list(cls) -> list[str]:
-        return [cls.page_imports()]
+        imports, register, page, layout = cls.page_default_contents()
+        return [imports, register, page, layout]

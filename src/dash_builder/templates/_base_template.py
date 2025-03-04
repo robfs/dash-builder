@@ -1,11 +1,13 @@
 """Module containing the base template for generating project files."""
 
 import abc
+from pathlib import Path
 
 __all__ = ["BaseTemplate"]
 
 
 class BaseTemplate(abc.ABC):
+    path: Path = Path(".")
     _dash_imports: list[str] = []
     _dash_builder_imports: list[str] = []
 

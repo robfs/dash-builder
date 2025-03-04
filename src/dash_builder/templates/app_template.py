@@ -1,11 +1,15 @@
 """Module containing the template for app.py."""
 
+from pathlib import Path
+
 from ._base_template import BaseTemplate
 
 __all__ = ["AppTemplate"]
 
 
 class AppTemplate(BaseTemplate):
+    path = Path("app.py")
+
     @staticmethod
     def imports() -> str:
         return "import dash\n"

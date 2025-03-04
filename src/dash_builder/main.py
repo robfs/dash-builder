@@ -6,7 +6,7 @@ from pathlib import Path
 import typer
 from rich.console import Console
 from rich.markup import escape
-from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.progress import Progress, BarColumn, TextColumn, MofNCompleteColumn
 from rich.text import Text
 from rich.tree import Tree
 
@@ -27,42 +27,40 @@ class ProjectInitiator:
         self.path = Path(location)
         self.project = self.path / name
 
-        self.app = self.project / "app.py"
-
-        self.pages = self.project / "pages"
-        self.home = self.pages / "home.py"
-        self.not_found_404 = self.pages / "not_found_404.py"
+        self.templates: "list[type[BaseTemplate]]" = [
+            AppTemplate,
+            HomepageTemplate,
+            NotFound404Template,
+        ]
 
     def spinner(self, **kwargs):
         fmt: str = "[progress.description]{task.description}"
-        return Progress(SpinnerColumn(), TextColumn(fmt), **kwargs)
-
-    def print_initiation(self):
-        absolute_path = self.path.absolute()
-        self.console.print(
-            f"Initiating [bold green]{self.name}[/bold green] in [bold purple]{absolute_path}[/bold purple]"
-        )
+        return Progress(MofNCompleteColumn(), BarColumn(), TextColumn(fmt), **kwargs)
 
     def print_completion(self):
         self.console.print(
-            f"[bold green]{self.project}[/bold green] successfully created."
+            f"[bold green]{self.project}[/bold green] successfully created in [bold purple]{self.path.absolute()}[/bold purple]."
         )
 
     def check_if_app_exists(self) -> bool:
-        if self.app.exists():
+        app_path = self.project / AppTemplate.path
+        if app_path.exists():
             warning = "[bold red]FAILED[/bold red]"
             warning += (
-                f"[bold purple]{self.app.absolute()}[/bold purple] already exists."
+                f"[bold purple]{app_path.absolute()}[/bold purple] already exists."
             )
             warning += "\nPlease remove or rename this file and try again."
             self.console.print(warning)
             return True
         return False
 
-    def create_file(self, path: Path, template: "type[BaseTemplate]"):
-        if not path.exists():
-            with open(path, "w") as f:
-                f.write(template.content())
+    def create_file_from_template(self, template: "type[BaseTemplate]"):
+        file_path = self.project / template.path
+        parent = file_path.parent
+        if not parent.exists():
+            parent.mkdir(exist_ok=True, parents=True)
+        if not file_path.exists():
+            file_path.write_text(template.content())
 
     def create_directory(self, path: Path):
         if not path.exists():
@@ -107,19 +105,16 @@ class ProjectInitiator:
 
     def run(self):
         self.TEMP_REMOVE_PROJECT()
-        self.print_initiation()
         already_exists = self.check_if_app_exists()
         if already_exists:
             return None
-        with self.spinner(transient=True, console=self.console) as progress:
-            progress.add_task("Creating project directory...")
-            self.create_directory(self.project)
-            progress.add_task("Creating app.py file...")
-            self.create_file(self.app, AppTemplate)
-            progress.add_task("Creating pages...")
-            self.create_directory(self.pages)
-            self.create_file(self.home, HomepageTemplate)
-            self.create_file(self.not_found_404, NotFound404Template)
+        with self.spinner(console=self.console) as progress:
+            task = progress.add_task("Creating project", total=len(self.templates))
+            for template in self.templates:
+                progress.update(task, description=f"Creating {template.path}")
+                self.create_file_from_template(template)
+                progress.update(task, advance=1)
+            progress.update(task, description="Complete")
         self.print_completion()
         self.print_tree(self.project)
 

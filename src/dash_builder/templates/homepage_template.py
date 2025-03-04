@@ -1,11 +1,14 @@
 """Module containing the home page template."""
 
+from pathlib import Path
+
 from ._base_template import BaseTemplate
 
 __all__ = ["HomepageTemplate"]
 
 
 class HomepageTemplate(BaseTemplate):
+    path = Path("pages") / "home.py"
     _dash_imports = ["html"]
     _dash_builder_imports = ["DashPage"]
 

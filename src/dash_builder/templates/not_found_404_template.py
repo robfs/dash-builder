@@ -1,11 +1,14 @@
 """Module containing a custom 404 error template."""
 
+from pathlib import Path
+
 from ._base_template import BaseTemplate
 
 __all__ = ["NotFound404Template"]
 
 
 class NotFound404Template(BaseTemplate):
+    path = Path("pages") / "not_found_404.py"
     _dash_imports = ["html"]
     _dash_builder_imports = ["DashPage"]
 

@@ -1,16 +1,29 @@
+import pytest
+
 from src.dash_builder.main import app
+from src.dash_builder.templates import (
+    AppTemplate,
+    HomepageTemplate,
+    NotFound404Template,
+)
 
 
-def test_init_project_cli(runner, tmp_path):
-    result = runner.invoke(app, ["init-project", str(tmp_path)])
-    app_file = tmp_path / "app.py"
-    pages = tmp_path / "pages"
-    homepage = pages / "home.py"
-    not_found_404 = pages / "not_found_404.py"
+@pytest.mark.parametrize(
+    "project_name", ["test-project-1", "test_project_2", "testproject"]
+)
+def test_init_project_cli(runner, tmp_path, project_name):
+    app_params = ["init-project", project_name, "--location", str(tmp_path)]
+    result = runner.invoke(app, app_params)
+    project = tmp_path / project_name
+    app_file = project / AppTemplate.path
+    pages = project / "pages"
+    homepage = project / HomepageTemplate.path
+    not_found_404 = project / NotFound404Template.path
     assert result.exit_code == 0
-    # TODO: remove deletion
-    assert f"DELETING {tmp_path}" in result.stdout.replace("\n", "")
-    assert f"{tmp_path} successfully created." in result.stdout.replace("\n", "")
+    assert (
+        f"{project_name} successfully created in {tmp_path}"
+        in result.stdout.replace("\n", "")
+    )
     assert tmp_path.exists()
     assert app_file.exists()
     assert pages.exists()

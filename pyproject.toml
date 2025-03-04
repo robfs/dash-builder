@@ -1,6 +1,6 @@
 [project]
 name = "dash-builder"
-version = "0.1.1"
+version = "0.1.2"
 description = "A tool and framework to simplify construction of Python Dash applications."
 readme = "README.md"
 authors = [{ name = "robfs", email = "robfoxsimms@gmail.com" }]

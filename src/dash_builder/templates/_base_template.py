@@ -38,7 +38,7 @@ class BaseTemplate(abc.ABC):
     def register_page(path: str | None) -> str:
         args = "__name__"
         if path is not None:
-            args += f", {path}"
+            args += f', "{path}"'
         return f"dash.register_page({args})"
 
     @classmethod

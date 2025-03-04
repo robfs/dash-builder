@@ -1,5 +1,4 @@
 import pytest
-
 from dash import ALL, MATCH
 
 from src.dash_builder import DashView

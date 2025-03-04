@@ -104,7 +104,7 @@ class ProjectInitiator:
         self.console.print(tree)
 
     def run(self):
-        self.TEMP_REMOVE_PROJECT()
+        # self.TEMP_REMOVE_PROJECT()
         already_exists = self.check_if_app_exists()
         if already_exists:
             return None

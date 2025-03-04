@@ -6,7 +6,7 @@ from pathlib import Path
 import typer
 from rich.console import Console
 from rich.markup import escape
-from rich.progress import Progress, BarColumn, TextColumn, MofNCompleteColumn
+from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
 from rich.text import Text
 from rich.tree import Tree
 

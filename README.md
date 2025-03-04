@@ -8,6 +8,26 @@ A tool and framework to simplify construction of Python Dash applications.
 
 ## Usage
 
+`dash-builder` provides a simple command-line interface (CLI) for initiating and managing your `dash` project.
+
+### Initiating a Dash Project
+
+The `init-project` command creates a new skeleton project.
+It takes a single argument, the name for the new project.
+You can use the `--location` option to choose the directory in which to create it.
+If no `location` is passed, it will be created in the current working directory.
+
+```bash
+❯ dash-builder init-project test-project
+3/3 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Complete
+test-project successfully created in /Users/<username>.
+📂 test-project
+├── 📂 pages
+│   ├── home.py
+│   └── not_found_404.py
+└── app.py
+```
+
 `dash-builder` implements defines 2x classes to be used when building apps:
 
 * `DashPage` - all page modules should define a page object that inherits from this abstract base class.

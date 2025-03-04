@@ -1,3 +1,5 @@
+"""Module containing the abstract DashView class for defining components of application pages."""
+
 import abc
 import re
 import typing

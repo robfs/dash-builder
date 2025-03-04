@@ -1,3 +1,5 @@
+"""Module containing the main `typer` CLI for managing dash projects."""
+
 import os
 import pathlib
 import typing

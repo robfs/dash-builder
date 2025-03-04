@@ -1,3 +1,5 @@
+"""Tests for the main `typer` CLI."""
+
 import pytest
 
 from src.dash_builder.main import app

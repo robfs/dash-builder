@@ -1,3 +1,5 @@
+"""Module containing the abstract DashPage class for defining application pages."""
+
 import abc
 import traceback
 

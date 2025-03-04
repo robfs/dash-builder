@@ -1,3 +1,5 @@
+"""Tests for the DashPage class."""
+
 import pytest
 from dash import html
 

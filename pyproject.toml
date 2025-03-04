@@ -5,11 +5,7 @@ description = "A tool and framework to simplify construction of Python Dash appl
 readme = "README.md"
 authors = [{ name = "robfs", email = "robfoxsimms@gmail.com" }]
 requires-python = ">=3.10"
-dependencies = [
-    "dash>=2.18.2",
-    "rich>=13.9.4",
-    "typer>=0.15.1",
-]
+dependencies = ["dash>=2.18.2", "rich>=13.9.4", "typer>=0.15.1"]
 
 [project.scripts]
 dash-builder = "dash_builder.main:app"
@@ -23,11 +19,7 @@ venvPath = "."
 venv = ".venv"
 
 [dependency-groups]
-dev = [
-    "pytest>=8.3.4",
-    "pytest-cov>=6.0.0",
-    "ruff>=0.9.7",
-]
+dev = ["pytest>=8.3.4", "pytest-cov>=6.0.0", "ruff>=0.9.7"]
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.

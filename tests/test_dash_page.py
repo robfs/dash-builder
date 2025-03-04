@@ -1,5 +1,5 @@
-from dash import html
 import pytest
+from dash import html
 
 from src.dash_builder import DashPage
 

@@ -19,7 +19,7 @@ venvPath = "."
 venv = ".venv"
 
 [dependency-groups]
-dev = ["pytest>=8.3.4", "pytest-cov>=6.0.0", "ruff>=0.9.7"]
+dev = ["pdoc>=15.0.1", "pytest>=8.3.4", "pytest-cov>=6.0.0", "ruff>=0.9.7"]
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.

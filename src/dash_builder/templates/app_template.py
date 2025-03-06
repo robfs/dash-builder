@@ -10,15 +10,18 @@ __all__ = ["AppTemplate"]
 
 
 class AppTemplate(BaseTemplate):
+    """Template for building the app.py file."""
 
     path = Path("app.py")
 
     @staticmethod
     def app() -> str:
+        """Get the string representation of the app."""
         return "app: dash.Dash = dash.Dash(__name__, use_pages=True)"
 
     @staticmethod
     def main() -> str:
+        """Get the string representation of the main function."""
         return 'if __name__ == "__main__":\n\tapp.run(debug=True)\n'
 
     @override

@@ -198,6 +198,7 @@ dependencies = [
     { name = "dash" },
     { name = "rich" },
     { name = "typer" },
+    { name = "typing-extensions" },
 ]
 
 [package.dev-dependencies]
@@ -213,6 +214,7 @@ requires-dist = [
     { name = "dash", specifier = ">=2.18.2" },
     { name = "rich", specifier = ">=13.9.4" },
     { name = "typer", specifier = ">=0.15.1" },
+    { name = "typing-extensions", specifier = ">=4.12.2" },
 ]
 
 [package.metadata.requires-dev]

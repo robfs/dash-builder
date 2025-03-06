@@ -10,6 +10,8 @@ __all__ = ["NotFound404Template"]
 
 
 class NotFound404Template(BaseTemplate):
+    """Template for building the custom 404 error file."""
+
     path = Path("pages") / "not_found_404.py"
     _dash_imports = ["html"]
     _dash_builder_imports = ["DashPage"]

@@ -10,6 +10,8 @@ __all__ = ["HomepageTemplate"]
 
 
 class HomepageTemplate(BaseTemplate):
+    """Template for building the hompeage home.py file."""
+
     path = Path("pages") / "home.py"
     _dash_imports = ["html"]
     _dash_builder_imports = ["DashPage"]

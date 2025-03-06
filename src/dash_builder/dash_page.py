@@ -31,16 +31,43 @@ class DashPage(abc.ABC):
     """
 
     @classmethod
-    def error_container(cls, message):
+    def error_container(cls, message: str) -> html.Div:
+        """Generate the page layout when the page load fails.
+
+        Args:
+            message: error message to be rendered.
+
+        Returns:
+            `dash.html.Div` container.
+
+        """
         return html.Div(html.Pre(message))
 
     @classmethod
     @abc.abstractmethod
     def valid_layout(cls, **kwargs):
+        """Generate the desired page layout.
+
+        Args:
+            kwargs: additional keyword arguments.
+
+        Raises:
+            `NotImplementedError`: must be implemented by the subclass.
+
+        """
         raise NotImplementedError
 
     @classmethod
     def layout(cls, **kwargs):
+        """Generate the page layout.
+
+        Args:
+            kwargs: additional keyword arguments.
+
+        Returns:
+            `dash.html.Div` container.
+
+        """
         try:
             return cls.valid_layout(**kwargs)
         except Exception:

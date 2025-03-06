@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.dash_builder.main import app
+from src.dash_builder.cli import app
 from src.dash_builder.templates import (
     AppTemplate,
     HomepageTemplate,

@@ -20,15 +20,13 @@ class BaseTemplate(abc.ABC):
         return imports
 
     @classmethod
-    @property
-    def dash_imports(cls) -> str:
+    def get_dash_imports(cls) -> str:
         imports = "import dash\n"
         imports += cls.create_import_string("dash", cls._dash_imports)
         return imports
 
     @classmethod
-    @property
-    def dash_builder_imports(cls) -> str:
+    def get_dash_builder_imports(cls) -> str:
         return cls.create_import_string("dash_builder", cls._dash_builder_imports)
 
     @classmethod
@@ -44,14 +42,13 @@ class BaseTemplate(abc.ABC):
         return f"dash.register_page({args})"
 
     @classmethod
-    @property
-    def page_name(cls) -> str:
+    def get_page_name(cls) -> str:
         return cls.__name__.replace("Template", "")
 
     @classmethod
-    def page_class(cls, layout: str) -> str:
+    def get_page_class(cls, layout: str) -> str:
         lines = (
-            f"class {cls.page_name}(DashPage):",
+            f"class {cls.get_page_name}(DashPage):",
             "\t@classmethod",
             "\tdef valid_layout(cls, **kwargs):",
             f"\t\treturn {layout}",
@@ -59,18 +56,18 @@ class BaseTemplate(abc.ABC):
         return "\n".join(lines)
 
     @classmethod
-    def layout_function(cls) -> str:
-        return f"def layout(**kwargs):\n\treturn {cls.page_name}().layout(**kwargs)"
+    def get_layout_function(cls) -> str:
+        return f"def layout(**kwargs):\n\treturn {cls.get_page_name}().layout(**kwargs)"
 
     @classmethod
-    def page_default_contents(
+    def get_default_page_contents(
         cls, path: str | None = None, layout: str = "[]"
     ) -> tuple[str, str, str, str]:
         return (
             cls.page_imports(),
             cls.register_page(path),
-            cls.page_class(layout=layout),
-            cls.layout_function(),
+            cls.get_page_class(layout=layout),
+            cls.get_layout_function(),
         )
 
     @classmethod

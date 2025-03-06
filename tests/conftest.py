@@ -1,3 +1,5 @@
+"""Pytest constants file."""
+
 import pytest
 from typer.testing import CliRunner
 

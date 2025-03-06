@@ -1,3 +1,5 @@
+"""Tests for the DashView class."""
+
 import pytest
 from dash import ALL, MATCH
 

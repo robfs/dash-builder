@@ -5,10 +5,15 @@ description = "A tool and framework to simplify construction of Python Dash appl
 readme = "README.md"
 authors = [{ name = "robfs", email = "robfoxsimms@gmail.com" }]
 requires-python = ">=3.10"
-dependencies = ["dash>=2.18.2", "rich>=13.9.4", "typer>=0.15.1"]
+dependencies = [
+    "dash>=2.18.2",
+    "rich>=13.9.4",
+    "typer>=0.15.1",
+    "typing-extensions>=4.12.2",
+]
 
 [project.scripts]
-dash-builder = "dash_builder.main:app"
+dash-builder = "dash_builder.cli:app"
 
 [build-system]
 requires = ["hatchling"]
@@ -19,7 +24,7 @@ venvPath = "."
 venv = ".venv"
 
 [dependency-groups]
-dev = ["pytest>=8.3.4", "pytest-cov>=6.0.0", "ruff>=0.9.7"]
+dev = ["pdoc>=15.0.1", "pytest>=8.3.4", "pytest-cov>=6.0.0", "ruff>=0.9.7"]
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
@@ -63,8 +68,8 @@ target-version = "py311"
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
 # Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
 # McCabe complexity (`C901`) by default.
-select = ["E4", "E7", "E9", "F", "I"]
-ignore = []
+select = ["E4", "E7", "E9", "F", "I", "D"]
+ignore = ["D203", "D213"]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["I"]

@@ -102,7 +102,7 @@ class BaseTemplate(abc.ABC):
 
         """
         lines = (
-            f"class {cls.get_page_name}(DashPage):",
+            f"class {cls.get_page_name()}(DashPage):",
             "\t@classmethod",
             "\tdef valid_layout(cls, **kwargs):",
             f"\t\treturn {layout}",
@@ -117,7 +117,7 @@ class BaseTemplate(abc.ABC):
             string representation of the page layout function.
 
         """
-        return f"def layout(**kwargs):\n\treturn {cls.get_page_name}().layout(**kwargs)"
+        return f"def layout(**kwargs):\n\treturn {cls.get_page_name()}().layout(**kwargs)"
 
     @classmethod
     def get_default_page_contents(

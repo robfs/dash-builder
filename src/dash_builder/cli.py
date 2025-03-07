@@ -1,5 +1,6 @@
 """Module containing the main `typer` CLI for managing dash projects."""
 
+import os
 import pathlib
 import typing
 from pathlib import Path
@@ -140,6 +141,8 @@ class ProjectInitiator:
                 self.create_file_from_template(template)
                 progress.update(task, advance=1)
             progress.update(task, description="Complete")
+        os.system(f"ruff format {self.project}")
+        os.system(f"ruff check --select I --fix {self.project}")
         self.print_completion()
         self.print_tree(self.project)
 

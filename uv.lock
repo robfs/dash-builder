@@ -196,6 +196,7 @@ version = "0.1.2"
 source = { editable = "." }
 dependencies = [
     { name = "dash" },
+    { name = "dash-mantine-components" },
     { name = "rich" },
     { name = "typer" },
     { name = "typing-extensions" },
@@ -212,6 +213,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "dash", specifier = ">=2.18.2" },
+    { name = "dash-mantine-components", specifier = ">=0.15.3" },
     { name = "rich", specifier = ">=13.9.4" },
     { name = "typer", specifier = ">=0.15.1" },
     { name = "typing-extensions", specifier = ">=4.12.2" },
@@ -241,6 +243,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/14/c6/957d5e83b620473eb3c8557a253fb01c6a817b10ca43d3ff9d31796f32a6/dash_html_components-2.0.0.tar.gz", hash = "sha256:8703a601080f02619a6390998e0b3da4a5daabe97a1fd7a9cebc09d015f26e50", size = 3840 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/75/65/1b16b853844ef59b2742a7de74a598f376ac0ab581f0dcc34db294e5c90e/dash_html_components-2.0.0-py3-none-any.whl", hash = "sha256:b42cc903713c9706af03b3f2548bda4be7307a7cf89b7d6eae3da872717d1b63", size = 4092 },
+]
+
+[[package]]
+name = "dash-mantine-components"
+version = "0.15.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dash" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7a/cc/6c65214304fbe970fb9ab5d7ce6d36d0e4eaa66e604fd22ac9a7b9f5e027/dash_mantine_components-0.15.3.tar.gz", hash = "sha256:265122b30370df46de2dabbe60824e3f0886085b04700677aa1713dfef0a549c", size = 946079 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a6/48/2fff4292687728de1a172ecb31c4bcf5a656d53fcf1e72f5b088490a2f56/dash_mantine_components-0.15.3-py3-none-any.whl", hash = "sha256:a8ad002ba36848adbca66570383f10203b0edb3e87bdf38209e12b01c52db379", size = 1260944 },
 ]
 
 [[package]]

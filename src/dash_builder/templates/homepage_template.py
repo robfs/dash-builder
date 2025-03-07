@@ -19,5 +19,5 @@ class HomepageTemplate(BaseTemplate):
     @override
     @classmethod
     def content_list(cls) -> list[str]:
-        layout = '[html.H1("This is the Homepage")]'
+        layout = '[html.H2("This is the page layout")]'
         return list(cls.get_default_page_contents(path="/", layout=layout))

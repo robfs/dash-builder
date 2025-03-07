@@ -13,11 +13,17 @@ class AppTemplate(BaseTemplate):
     """Template for building the app.py file."""
 
     path = Path("app.py")
+    _dash_imports = ["html"]
 
     @staticmethod
     def app() -> str:
         """Get the string representation of the app."""
         return "app: dash.Dash = dash.Dash(__name__, use_pages=True)"
+
+    @staticmethod
+    def app_layout() -> str:
+        """Get the string representation of the app layout."""
+        return 'app.layout = html.Div([html.H1("This is the main application layout"), dash.page_container])'
 
     @staticmethod
     def main() -> str:
@@ -27,4 +33,4 @@ class AppTemplate(BaseTemplate):
     @override
     @classmethod
     def content_list(cls) -> list[str]:
-        return [cls.get_dash_imports(), cls.app(), cls.main()]
+        return [cls.get_dash_imports(), cls.app(), cls.app_layout(), cls.main()]

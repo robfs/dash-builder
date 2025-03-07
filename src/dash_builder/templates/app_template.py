@@ -18,7 +18,14 @@ class AppTemplate(BaseTemplate):
     @staticmethod
     def app() -> str:
         """Get the string representation of the app."""
-        return "app: dash.Dash = dash.Dash(__name__, use_pages=True)"
+        args = ", ".join(
+            ["__name__", "use_pages=True", "external_stylesheets=dmc.styles.ALL"]
+        )
+        lines: list[str] = [
+            'dash._dash_renderer._set_react_version("18.2.0")',
+            f"app: dash.Dash = dash.Dash({args})",
+        ]
+        return "\n".join(lines)
 
     @staticmethod
     def app_layout() -> str:

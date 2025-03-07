@@ -14,6 +14,7 @@ class AppTemplate(BaseTemplate):
 
     path = Path("app.py")
     _dash_imports = ["html"]
+    _dash_builder_imports = ["DashPage"]
 
     @staticmethod
     def app() -> str:
@@ -28,16 +29,64 @@ class AppTemplate(BaseTemplate):
         return "\n".join(lines)
 
     @staticmethod
-    def app_layout() -> str:
+    def app_header() -> str:
+        """Get the header bar / navbar for the app."""
+        return 'dmc.AppShellHeader("")'
+
+    @staticmethod
+    def app_navbar() -> str:
+        """Get the sidebar / navbar for the app."""
+        return 'dmc.AppShellNavbar("")'
+
+    @staticmethod
+    def app_main() -> str:
+        """Get the main content for the app."""
+        return "dmc.AppShellMain(dash.page_container)"
+
+    @staticmethod
+    def app_aside() -> str:
+        """Get the sidebar / navbar for the app."""
+        return 'dmc.AppShellAside("")'
+
+    @staticmethod
+    def app_footer() -> str:
+        """Get the footer for the app."""
+        return 'dmc.AppShellFooter("")'
+
+    @classmethod
+    def app_shell(cls) -> str:
+        """Get the string representation of the app shell."""
+        header = cls.app_header()
+        navbar = cls.app_navbar()
+        main = cls.app_main()
+        aside = cls.app_aside()
+        footer = cls.app_footer()
+        components = "[" + ",".join([header, navbar, main, aside, footer]) + "]"
+        return f"dmc.AppShell({components})"
+
+    @classmethod
+    def app_layout(cls) -> str:
         """Get the string representation of the app layout."""
-        return 'app.layout = html.Div([html.H1("This is the main application layout"), dash.page_container])'
+        return f"dmc.MantineProvider({cls.app_shell()})"
+    
+    @classmethod
+    def get_app_layout_definition(cls) -> str:
+        return f"app.layout = {cls.get_page_name()}.layout()"
+
 
     @staticmethod
     def main() -> str:
         """Get the string representation of the main function."""
-        return 'if __name__ == "__main__":\n\tapp.run(debug=True)\n'
+        return 'if __name__ == "__main__":\n\tapp.run(debug=True)'
 
     @override
     @classmethod
     def content_list(cls) -> list[str]:
-        return [cls.get_dash_imports(), cls.app(), cls.app_layout(), cls.main()]
+        return [
+            cls.get_dash_imports(),
+            cls.get_dash_builder_imports(),
+            cls.app(),
+            cls.get_page_class(cls.app_layout()),
+            cls.get_app_layout_definition(),
+            cls.main(),
+        ]

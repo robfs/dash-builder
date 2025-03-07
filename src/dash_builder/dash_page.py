@@ -20,10 +20,12 @@ class DashPage(abc.ABC):
 
     dash.register_page(__name__, path="/")
 
+
     class Homepage(Dash):
         @classmethod
         def valid_layout(cls, **kwargs):
             return html.H1("This is the Homepage")
+
 
     def layout(**kwargs):
         return Homepage.layout(**kwargs)

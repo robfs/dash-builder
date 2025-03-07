@@ -39,7 +39,7 @@ class BaseTemplate(abc.ABC):
             import string for the `dash` package.
 
         """
-        imports = "import dash\n"
+        imports = "import dash\nimport dash_mantine_components as dmc\n"
         imports += cls.create_import_string("dash", cls._dash_imports)
         return imports
 

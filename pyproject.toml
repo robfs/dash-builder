@@ -15,7 +15,7 @@ dependencies = [
 ]
 
 [project.scripts]
-dash-builder = "dash_builder.cli:app"
+dashb = "dash_builder.cli:app"
 
 [build-system]
 requires = ["hatchling"]

@@ -147,8 +147,8 @@ class ProjectInitiator:
         self.print_tree(self.project)
 
 
-@app.command("init-project")
-def init_project(project_name: str, location: str = "."):
+@app.command("create")
+def create(project_name: str, location: str = "."):
     """Initialise a new Dash Builder project.
 
     Args:

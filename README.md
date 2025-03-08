@@ -1,9 +1,31 @@
 # dash-builder
 
-> [!NOTE]
-> `dash-builder` and its developer(s) have no direct relationship with the original `dash` project or its commercial parent, Plotly.
+> [!IMPORTANT]
+> `dash-builder` and its developer(s) are not associated with the original `dash` project or its commercial parent, Plotly.
 
 A tool and framework to simplify construction of Python Dash applications.
+
+## API Design
+
+* Create a project in the current working directory
+```bash
+> dashb create testproject
+```
+
+* Create project in specified directory
+```bash
+> dashb create testproject --location ~/projects
+```
+
+* Add new page to current dash project in pages/ directory
+```bash
+> dashb page NewPage
+```
+
+* Add new page to current dash project in specific directory within pages/
+```bash
+> dashb page NewPage --location archive
+```
 
 ## Installation
 
@@ -15,13 +37,13 @@ A tool and framework to simplify construction of Python Dash applications.
 
 ### Initiating a Dash Project
 
-The `init-project` command creates a new skeleton project.
+The `create` command creates a new skeleton project.
 It takes a single argument, the name for the new project.
 You can use the `--location` option to choose the directory in which to create it.
 If no `location` is passed, it will be created in the current working directory.
 
 ```bash
-❯ dash-builder init-project test-project
+❯ dashb create test-project
 3/3 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Complete
 test-project successfully created in /Users/<username>.
 📂 test-project

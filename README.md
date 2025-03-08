@@ -1,5 +1,8 @@
 # dash-builder
 
+> [!NOTE]
+> `dash-builder` and its developer(s) have no direct relationship with the original `dash` project or its commercial parent, Plotly.
+
 A tool and framework to simplify construction of Python Dash applications.
 
 ## Installation

@@ -14,7 +14,7 @@ from src.dash_builder.templates import (
     "project_name", ["test-project-1", "test_project_2", "testproject"]
 )
 def test_init_project_cli(runner, tmp_path, project_name):
-    app_params = ["init-project", project_name, "--location", str(tmp_path)]
+    app_params = ["create", project_name, "--location", str(tmp_path)]
     result = runner.invoke(app, app_params)
     project = tmp_path / project_name
     app_file = project / AppTemplate.path

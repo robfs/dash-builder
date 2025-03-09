@@ -10,6 +10,7 @@ __all__ = ["DashObject"]
 
 PASCAL_TO_KEBAB_REGEX = re.compile(r"(?<!^)(?=[A-Z])")
 
+
 class DashObject(abc.ABC):
     """Abstract base class for creating Dash objects."""
 
@@ -26,7 +27,6 @@ class DashObject(abc.ABC):
         """
         return PASCAL_TO_KEBAB_REGEX.sub("-", input).lower()
 
-
     @classmethod
     def name(cls, subname: str | None = None) -> str:
         """View name, used as the `type` field of component IDs.
@@ -42,7 +42,7 @@ class DashObject(abc.ABC):
         if subname is not None:
             n += f"-{subname}"
         return n
-    
+
     @classmethod
     def error_container(cls, message: str) -> html.Div:
         """Generate the page layout when the page load fails.

@@ -12,7 +12,6 @@ from ._dash_object import DashObject
 __all__ = ["DashView", "ComponentId"]
 
 
-
 class ComponentId(typing.TypedDict):
     """Dictionary class for component IDs."""
 
@@ -73,7 +72,7 @@ class DashView(DashObject):
 
         """
         return cls.id(ALL)
-    
+
     @override
     @classmethod
     @abc.abstractmethod

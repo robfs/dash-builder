@@ -68,14 +68,14 @@ class AppTemplate(BaseTemplate):
     def app_layout(cls) -> str:
         """Get the string representation of the app layout."""
         return f"dmc.MantineProvider({cls.app_shell()})"
-    
+
     @classmethod
     def get_app_layout_definition(cls) -> str:
+        """Get the string representation of the app layout definition."""
         return f"app.layout = {cls.get_page_name()}.layout()"
 
-
     @staticmethod
-    def main() -> str:
+    def get_main_function() -> str:
         """Get the string representation of the main function."""
         return 'if __name__ == "__main__":\n\tapp.run(debug=True)'
 
@@ -88,5 +88,5 @@ class AppTemplate(BaseTemplate):
             cls.app(),
             cls.get_page_class(cls.app_layout()),
             cls.get_app_layout_definition(),
-            cls.main(),
+            cls.get_main_function(),
         ]

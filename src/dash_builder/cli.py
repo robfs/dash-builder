@@ -1,21 +1,16 @@
 """Module containing the main `typer` CLI for managing dash projects."""
 
-import os
 import pathlib
-import typing
+import shutil
 from pathlib import Path
 
 import typer
 from rich.console import Console
 from rich.markup import escape
-from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
+from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.text import Text
 from rich.tree import Tree
-
-from .templates import AppTemplate, HomepageTemplate, NotFound404Template
-
-if typing.TYPE_CHECKING:
-    from .templates._base_template import BaseTemplate
+from typing_extensions import Annotated
 
 app: typer.Typer = typer.Typer()
 """The `typer.Typer` applicaiton object."""
@@ -24,11 +19,12 @@ app: typer.Typer = typer.Typer()
 class ProjectInitiator:
     """Object to capture and process project initiation options and logic."""
 
-    def __init__(self, name: str, location: str, **kwargs):
+    def __init__(self, name: str, template: str, location: str, **kwargs):
         """Create project initiation class.
 
         Args:
             name: the name of the project (used for the project directory).
+            template: the template to use for the project.
             location: the destination directory for the project.
             **kwargs: additional keyword arguments.
 
@@ -37,15 +33,15 @@ class ProjectInitiator:
         """`rich.Console` object for printing to stdout."""
         self.name: str = name
         """Project name."""
+        self._template: str = template
+        """Project template."""
         self._location: str = location
         """Project destination directory."""
 
-        self.templates: "list[type[BaseTemplate]]" = [
-            AppTemplate,
-            HomepageTemplate,
-            NotFound404Template,
-        ]
-        """List of template files to create as part of the project."""
+    @property
+    def template(self) -> Path:
+        """Template directory."""
+        return Path(__file__).parent / "examples" / self._template
 
     @property
     def location(self) -> Path:
@@ -60,7 +56,7 @@ class ProjectInitiator:
     def spinner(self, **kwargs):
         """Customised `rich.Progress` bar."""
         fmt: str = "[progress.description]{task.description}"
-        return Progress(MofNCompleteColumn(), BarColumn(), TextColumn(fmt), **kwargs)
+        return Progress(SpinnerColumn(), TextColumn(fmt), **kwargs)
 
     def print_completion(self):
         """Print confirmation of project initiation."""
@@ -70,7 +66,7 @@ class ProjectInitiator:
 
     def check_if_app_exists(self) -> bool:
         """Check if the `app.py` file already exists."""
-        app_path = self.project / AppTemplate.path
+        app_path = self.project / "app.py"
         if app_path.exists():
             warning = "[bold red]FAILED[/bold red]"
             warning += (
@@ -81,19 +77,8 @@ class ProjectInitiator:
             return True
         return False
 
-    def create_file_from_template(self, template: "type[BaseTemplate]"):
-        """Create a projet file from a template."""
-        file_path = self.project / template.path
-        parent = file_path.parent
-        if not parent.exists():
-            parent.mkdir(exist_ok=True, parents=True)
-        if not file_path.exists():
-            file_path.write_text(template.content())
-
     def _TEMP_REMOVE_PROJECT(self):
         if self.project.exists():
-            import shutil
-
             self.console.print(f"[bold red]DELETING {self.project}[/bold red]")
             shutil.rmtree(self.project)
 
@@ -130,33 +115,41 @@ class ProjectInitiator:
 
     def run(self):
         """Run the project initiation."""
-        # self._TEMP_REMOVE_PROJECT()
+        if not self.template.exists() or not self.template.is_dir():
+            self.console.print(
+                f"[bold red]Error:[/bold red] Template '{self._template}' not found in examples."
+            )
+            return None
+        self._TEMP_REMOVE_PROJECT()
         already_exists = self.check_if_app_exists()
         if already_exists:
             return None
-        with self.spinner(console=self.console) as progress:
-            task = progress.add_task("Creating project", total=len(self.templates))
-            for template in self.templates:
-                progress.update(task, description=f"Creating {template.path}")
-                self.create_file_from_template(template)
-                progress.update(task, advance=1)
-            progress.update(task, description="Complete")
-        os.system(f"ruff format {self.project}")
-        os.system(f"ruff check --select I --fix {self.project}")
+        with self.spinner(console=self.console, transient=True) as progress:
+            progress.add_task("Creating project")
+            shutil.copytree(self.template, self.project)
         self.print_completion()
         self.print_tree(self.project)
 
 
 @app.command("create")
-def create(project_name: str, location: str = "."):
+def create(
+    project_name: Annotated[str, typer.Argument(help="The name of the project.")],
+    template: Annotated[
+        str, typer.Argument(help="The template to use for the project.")
+    ] = "basic-mantine",
+    location: Annotated[
+        str, typer.Option(help="The destination directory for the project.")
+    ] = ".",
+):
     """Initialise a new Dash Builder project.
 
     Args:
         project_name: the name of the project (used for the project directory).
+        template: the template to use for the project.
         location: the destination directory for the project.
 
     """
-    initiator = ProjectInitiator(project_name, location)
+    initiator = ProjectInitiator(project_name, template, location)
     initiator.run()
 
 

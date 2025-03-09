@@ -3,11 +3,6 @@
 import pytest
 
 from src.dash_builder.cli import app
-from src.dash_builder.templates import (
-    AppTemplate,
-    HomepageTemplate,
-    NotFound404Template,
-)
 
 
 @pytest.mark.parametrize(
@@ -17,10 +12,10 @@ def test_init_project_cli(runner, tmp_path, project_name):
     app_params = ["create", project_name, "--location", str(tmp_path)]
     result = runner.invoke(app, app_params)
     project = tmp_path / project_name
-    app_file = project / AppTemplate.path
+    app_file = project / "app.py"
     pages = project / "pages"
-    homepage = project / HomepageTemplate.path
-    not_found_404 = project / NotFound404Template.path
+    homepage = pages / "home.py"
+    not_found_404 = pages / "not_found_404.py"
     assert result.exit_code == 0
     assert (
         f"{project_name} successfully created in {tmp_path}"

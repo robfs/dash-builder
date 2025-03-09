@@ -71,17 +71,18 @@ class DashObject(abc.ABC):
         raise NotImplementedError
 
     @classmethod
-    def layout(cls, **kwargs):
+    def layout(cls, *args, **kwargs):
         """Generate the page layout.
 
         Args:
-            kwargs: additional keyword arguments.
+            *args: additional positional arguments.
+            **kwargs: additional keyword arguments.
 
         Returns:
             `dash.html.Div` container.
 
         """
         try:
-            return cls.valid_layout(**kwargs)
+            return cls.valid_layout(*args, **kwargs)
         except Exception:
             return cls.error_container(traceback.format_exc())

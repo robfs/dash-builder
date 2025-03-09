@@ -88,18 +88,3 @@ class DashView(DashObject):
 
         """
         raise NotImplementedError
-
-    @override
-    @classmethod
-    def layout(cls, id: str, **kwargs):
-        """Create the components of the view.
-
-        Arguments:
-            id: logical identifier for the component.
-            **kwargs: additional keyword arguments.
-
-        Raises:
-            `NotImplementedError`: must be implemented by the subclass.
-
-        """
-        super().layout(id=id, **kwargs)

@@ -1,14 +1,11 @@
 """Module containing the abstract DashPage class for defining application pages."""
 
-import abc
-import traceback
-
-from dash import html
+from ._dash_object import DashObject
 
 __all__ = ["DashPage"]
 
 
-class DashPage(abc.ABC):
+class DashPage(DashObject):
     """Abstract class for defining pages in a Dash application.
 
     # Example
@@ -31,46 +28,3 @@ class DashPage(abc.ABC):
         return Homepage.layout(**kwargs)
     ```
     """
-
-    @classmethod
-    def error_container(cls, message: str) -> html.Div:
-        """Generate the page layout when the page load fails.
-
-        Args:
-            message: error message to be rendered.
-
-        Returns:
-            `dash.html.Div` container.
-
-        """
-        return html.Div(html.Pre(message))
-
-    @classmethod
-    @abc.abstractmethod
-    def valid_layout(cls, **kwargs):
-        """Generate the desired page layout.
-
-        Args:
-            kwargs: additional keyword arguments.
-
-        Raises:
-            `NotImplementedError`: must be implemented by the subclass.
-
-        """
-        raise NotImplementedError
-
-    @classmethod
-    def layout(cls, **kwargs):
-        """Generate the page layout.
-
-        Args:
-            kwargs: additional keyword arguments.
-
-        Returns:
-            `dash.html.Div` container.
-
-        """
-        try:
-            return cls.valid_layout(**kwargs)
-        except Exception:
-            return cls.error_container(traceback.format_exc())

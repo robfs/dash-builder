@@ -104,7 +104,7 @@ class DashView(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def create(cls, id: str, **kwargs):
+    def layout(cls, id: str, **kwargs):
         """Create the components of the view.
 
         Arguments:

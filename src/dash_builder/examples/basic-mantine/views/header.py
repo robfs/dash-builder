@@ -16,10 +16,10 @@ class Header(DashView):
                 dmc.Image(
                     src="https://thumbs.dreamstime.com/b/logo-du-phoenix-d-oiseau-de-feu-à-gradient-simple-158339374.jpg",
                     h=30,
-                    id=cls.id(id, "logo"),
                 ),
                 dmc.Title("App Title"),
-            ]
+            ],
+            id=cls.id(id, "title"),
         )
 
     @classmethod

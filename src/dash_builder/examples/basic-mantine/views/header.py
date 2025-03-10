@@ -11,10 +11,15 @@ class Header(DashView):
 
     @classmethod
     def logo(cls, id: str):
-        return dmc.Image(
-            src="https://www.gapminder.org/wp-content/themes/gapminder2/images/gapminder-logo.svg",
-            h=30,
-            id=cls.id(id, "logo"),
+        return dmc.Group(
+            [
+                dmc.Image(
+                    src="https://thumbs.dreamstime.com/b/logo-du-phoenix-d-oiseau-de-feu-à-gradient-simple-158339374.jpg",
+                    h=30,
+                    id=cls.id(id, "logo"),
+                ),
+                dmc.Title("App Title"),
+            ]
         )
 
     @classmethod

@@ -126,9 +126,10 @@ class ProjectInitiator:
             return None
         with self.spinner(console=self.console, transient=True) as progress:
             progress.add_task("Creating project")
-            shutil.copytree(self.template, self.project)
+            to_ignore = shutil.ignore_patterns("__pycache__", "*.pyc")
+            output = shutil.copytree(self.template, self.project, ignore=to_ignore)
         self.print_completion()
-        self.print_tree(self.project)
+        self.print_tree(output.absolute())
 
 
 @app.command("create")

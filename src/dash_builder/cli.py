@@ -1,6 +1,7 @@
 """Module containing the main `typer` CLI for managing dash projects."""
 
 import pathlib
+import re
 import shutil
 from pathlib import Path
 
@@ -11,6 +12,8 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.text import Text
 from rich.tree import Tree
 from typing_extensions import Annotated
+
+from .templates import ViewTemplate
 
 app: typer.Typer = typer.Typer()
 """The `typer.Typer` applicaiton object."""
@@ -37,6 +40,24 @@ class Project:
         """Project template."""
         self._location: str = location
         """Project destination directory."""
+
+    @classmethod
+    def detect(cls) -> "Project":
+        """Detect the project from the current directory."""
+        cwd: Path = Path.cwd() / ".testproject"
+        app = cwd / "app.py"
+        views = cwd / "views"
+        pages = cwd / "pages"
+        test = (
+            app.exists()
+            and views.exists()
+            and pages.exists()
+            and views.is_dir()
+            and pages.is_dir()
+        )
+        if not test:
+            raise ValueError("No app.py found in the current directory.")
+        return cls(name=cwd.name, template="basic-mantine", location=cwd.parent)
 
     @property
     def template(self) -> Path:
@@ -131,6 +152,57 @@ class Project:
         self.print_completion()
         self.print_tree(output.absolute())
 
+    def create_new_view_module(self, template: ViewTemplate):
+        """Create a new view module."""
+        template.file_path.write_text(template.file_content)
+
+    def add_view_import_to_init_file(self, template: ViewTemplate):
+        """Add a view import to the init file."""
+        init_file = template.file_path.parent / "__init__.py"
+        module_name = template.file_name.strip(".py")
+        if not init_file.exists():
+            init_file.write_text('"""Views module."""\n\n__all__ = []\n')
+
+        content = init_file.read_text()
+        import_line = f"from .{module_name} import {template.class_name}\n"
+        if import_line in content:
+            self.console.print(
+                f"[bold red]WARNING[/bold red] {template.class_name} already imported."
+            )
+            return
+
+        # Insert import before __all__ using regex
+        content = re.sub(
+            r"(.*?)(\n__all__\s*=\s*\[.*?\])",
+            f"\\1{import_line}\\2",
+            content,
+            flags=re.DOTALL,
+        )
+
+        # Add class to __all__ list using regex
+        content = re.sub(
+            r"(__all__\s*=\s*\[)(.*?)(\])",
+            lambda m: f'{m.group(1)}{m.group(2)}{", " if m.group(2) else ""}"{template.class_name}"{m.group(3)}',
+            content,
+        )
+        init_file.write_text(content)
+
+    def add_view(self, view_name: str):
+        """Add a new view to the project."""
+        view_path = self.project / "views"
+        template = ViewTemplate(view_name, view_path)
+        if template.file_path.exists():
+            self.console.print(
+                f"[bold red]ERROR[/bold red] View '{template.file_name}' already exists."
+            )
+            return None
+
+        self.create_new_view_module(template)
+        self.add_view_import_to_init_file(template)
+        self.console.print(
+            f"[bold green]CREATED[/bold green] {template.class_name} view."
+        )
+
 
 @app.command("build")
 def build(
@@ -152,6 +224,18 @@ def build(
     """
     initiator = Project(project_name, template, location)
     initiator.build()
+
+
+@app.command("view")
+def create_view(view_name: str):
+    """Add a new view to the project.
+
+    Args:
+        view_name: the name of the view to add.
+
+    """
+    project = Project.detect()
+    project.add_view(view_name)
 
 
 @app.command("add-page")

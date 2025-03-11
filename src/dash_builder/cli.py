@@ -16,7 +16,7 @@ app: typer.Typer = typer.Typer()
 """The `typer.Typer` applicaiton object."""
 
 
-class ProjectInitiator:
+class Project:
     """Object to capture and process project initiation options and logic."""
 
     def __init__(self, name: str, template: str, location: str, **kwargs):
@@ -31,7 +31,7 @@ class ProjectInitiator:
         """
         self.console: Console = Console()
         """`rich.Console` object for printing to stdout."""
-        self.name: str = name
+        self.name: str = name.replace(" ", "-")
         """Project name."""
         self._template: str = template
         """Project template."""
@@ -113,7 +113,7 @@ class ProjectInitiator:
         self.walk_directory(path, tree)
         self.console.print(tree)
 
-    def run(self):
+    def build(self):
         """Run the project initiation."""
         if not self.template.exists() or not self.template.is_dir():
             self.console.print(
@@ -132,8 +132,8 @@ class ProjectInitiator:
         self.print_tree(output.absolute())
 
 
-@app.command("create")
-def create(
+@app.command("build")
+def build(
     project_name: Annotated[str, typer.Argument(help="The name of the project.")],
     template: Annotated[
         str, typer.Argument(help="The template to use for the project.")
@@ -150,8 +150,8 @@ def create(
         location: the destination directory for the project.
 
     """
-    initiator = ProjectInitiator(project_name, template, location)
-    initiator.run()
+    initiator = Project(project_name, template, location)
+    initiator.build()
 
 
 @app.command("add-page")

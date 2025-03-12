@@ -3,7 +3,7 @@ from typing import Any
 import dash
 import dash_mantine_components as dmc
 from typing_extensions import override
-from views import Footer, Header, Sidebar
+from views import FooterView, HeaderView, SidebarView
 
 from dash_builder import DashPage
 
@@ -285,10 +285,10 @@ class App(DashPage):
     def valid_layout(cls, **kwargs):
         return dmc.AppShell(
             [
-                Header.layout("header"),
-                Sidebar.layout("sidebar"),
+                HeaderView.layout("header"),
+                SidebarView.layout("sidebar"),
                 dmc.AppShellMain(dash.page_container),
-                Footer.layout("footer"),
+                FooterView.layout("footer"),
             ],
             header={"height": 60},
             footer={"height": 30},

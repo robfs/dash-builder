@@ -1,7 +1,7 @@
 """Module containing the DashView classes for the application."""
 
-from .footer import Footer
-from .header import Header
-from .sidebar import Sidebar
+from .footer import FooterView
+from .header import HeaderView
+from .sidebar import SidebarView
 
-__all__ = ["Footer", "Header", "Sidebar"]
+__all__ = ["FooterView", "HeaderView", "SidebarView"]

@@ -6,7 +6,7 @@ import dash_mantine_components as dmc
 from dash_builder import DashView
 
 
-class Header(DashView):
+class HeaderView(DashView):
     """App header."""
 
     @classmethod
@@ -30,6 +30,7 @@ class Header(DashView):
                 for page in dash.page_registry.values()
                 if page["name"] not in {"Not found 404"}
             ],
+            wrap="nowrap",
             h="100%",
             p="sm",
             id=cls.id(id, "nav-links"),
@@ -37,7 +38,7 @@ class Header(DashView):
 
     @classmethod
     def valid_layout(cls, id: str, **kwargs):
-        """Render valid layout for the header."""
+        """Render valid layout for the HeaderView."""
         return dmc.AppShellHeader(
             dmc.Group(
                 [cls.logo(id), cls.nav_links(id)], justify="space-between", px="md"

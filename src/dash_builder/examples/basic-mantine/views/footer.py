@@ -5,12 +5,12 @@ import dash_mantine_components as dmc
 from dash_builder import DashView
 
 
-class Footer(DashView):
+class FooterView(DashView):
     """App footer."""
 
     @classmethod
     def valid_layout(cls, id: str, **kwargs):
-        """Render valid layout for the footer."""
+        """Render valid layout for the FooterView."""
         return dmc.AppShellFooter(
             dmc.Text("Dash-Builder is not affiliated with Plotly or Dash"),
             ta="center",

@@ -5,12 +5,12 @@ import dash_mantine_components as dmc
 from dash_builder import DashView
 
 
-class Sidebar(DashView):
+class SidebarView(DashView):
     """App sidebar."""
 
     @classmethod
     def valid_layout(cls, id: str, **kwargs):
-        """Render valid layout for the sidebar."""
+        """Render valid layout for the SidebarView."""
         return dmc.AppShellNavbar(
             children=[
                 "Navbar",

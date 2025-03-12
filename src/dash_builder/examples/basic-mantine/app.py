@@ -2,7 +2,6 @@ from typing import Any
 
 import dash
 import dash_mantine_components as dmc
-from dash import html
 from typing_extensions import override
 from views import Footer, Header, Sidebar
 

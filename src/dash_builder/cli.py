@@ -13,7 +13,7 @@ from rich.text import Text
 from rich.tree import Tree
 from typing_extensions import Annotated
 
-from .templates import ViewTemplate
+from .templates import PageTemplate, ViewTemplate
 
 app: typer.Typer = typer.Typer()
 """The `typer.Typer` applicaiton object."""
@@ -156,6 +156,10 @@ class Project:
         """Create a new view module."""
         template.file_path.write_text(template.file_content)
 
+    def create_new_page_module(self, template: PageTemplate):
+        """Create a new page module."""
+        template.file_path.write_text(template.file_content)
+
     def add_view_import_to_init_file(self, template: ViewTemplate):
         """Add a view import to the init file."""
         init_file = template.file_path.parent / "__init__.py"
@@ -203,6 +207,21 @@ class Project:
             f"[bold green]CREATED[/bold green] {template.class_name} view."
         )
 
+    def add_page(self, page_name: str, url_path: str):
+        """Add a new page to the project."""
+        page_path = self.project / "pages"
+        template = PageTemplate(page_name, page_path, url_path)
+        if template.file_path.exists():
+            self.console.print(
+                f"[bold red]ERROR[/bold red] Page '{template.file_name}' already exists."
+            )
+            return None
+
+        self.create_new_page_module(template)
+        self.console.print(
+            f"[bold green]CREATED[/bold green] {template.class_name} page."
+        )
+
 
 @app.command("build")
 def build(
@@ -238,12 +257,16 @@ def create_view(view_name: str):
     project.add_view(view_name)
 
 
-@app.command("add-page")
-def add_page(page_name: str):
+@app.command("page")
+def create_page(
+    page_name: Annotated[str, typer.Argument(help="The name of the page to add.")],
+    url_path: Annotated[str, typer.Option(help="The URL path of the page.")] = None,
+):
     """Add a new page to the project.
 
     Args:
         page_name: the name of the page to add.
 
     """
-    typer.echo(page_name)
+    project = Project.detect()
+    project.add_page(page_name, url_path)

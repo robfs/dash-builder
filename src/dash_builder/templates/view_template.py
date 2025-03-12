@@ -1,41 +1,12 @@
 """Module containing the template for a new view."""
 
-import re
-from pathlib import Path
+from .object_template import ObjectTemplate
 
 __all__ = ["ViewTemplate"]
 
 
-class ViewTemplate:
+class ViewTemplate(ObjectTemplate):
     """Template for a new view."""
-
-    pascal_pattern = re.compile(r"(?<!^)(?=[A-Z])")
-
-    def __init__(self, name: str, path: Path):
-        """Initialize the view template."""
-        self.name: str = name
-        self.path: Path = path
-        self.file_path: Path = path / self.file_name
-
-    @classmethod
-    def to_snake_case(cls, value: str) -> str:
-        """Convert the name from PascalCase to snake_case using regex."""
-        return cls.pascal_pattern.sub("_", value).lower()
-
-    @property
-    def file_name(self) -> str:
-        """Get the file name of the view."""
-        return f"{self.to_snake_case(self.name)}.py"
-
-    @property
-    def class_name(self) -> str:
-        """Get the class name of the view."""
-        return self.name[0].upper() + self.name[1:]
-
-    @property
-    def module_comment(self) -> str:
-        """Get the module comment of the view."""
-        return f'"""Module containing the {self.class_name} view."""\n'
 
     @property
     def class_comment(self) -> str:
@@ -43,7 +14,7 @@ class ViewTemplate:
         return f'"""{self.class_name} view."""'
 
     @property
-    def imports(self) -> list[str]:
+    def imports(self) -> str:
         """Get the imports of the view."""
         return "\n".join(
             [

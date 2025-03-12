@@ -246,7 +246,9 @@ def build(
 
 
 @app.command("view")
-def create_view(view_name: str):
+def create_view(
+    view_name: Annotated[str, typer.Argument(help="The name of the view to add.")],
+):
     """Add a new view to the project.
 
     Args:

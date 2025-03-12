@@ -10,6 +10,8 @@ __all__ = ["PageTemplate"]
 class PageTemplate(ObjectTemplate):
     """Template for a new page."""
 
+    _type = "Page"
+
     def __init__(self, page_name: str, page_path: Path, url_path: str | None = None):
         super().__init__(page_name, page_path)
         self.url_path: str | None = url_path
@@ -17,7 +19,7 @@ class PageTemplate(ObjectTemplate):
     @property
     def class_comment(self) -> str:
         """Get the class comment of the page."""
-        return f'"""{self.class_name} page."""'
+        return f'"""{self.class_name}."""'
 
     @property
     def imports(self) -> str:
@@ -47,8 +49,8 @@ class PageTemplate(ObjectTemplate):
                 f"\t{self.class_comment}\n",
                 "\t@classmethod",
                 "\tdef valid_layout(cls, **kwargs):",
-                f'\t\t"""Render valid layout for the {self.class_name} page."""',
-                f'\t\treturn [html.Div(dmc.Title("This is the {self.class_name} page", order=2))]\n',
+                f'\t\t"""Render valid layout for the {self.class_name}."""',
+                f'\t\treturn [html.Div(dmc.Title("This is the {self.class_name}", order=2))]\n',
             ]
         )
 

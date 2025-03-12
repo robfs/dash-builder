@@ -10,6 +10,7 @@ __all__ = ["ObjectTemplate"]
 class ObjectTemplate(abc.ABC):
     """Template for a new object."""
 
+    _type: str = "Object"
     pascal_pattern = re.compile(r"(?<!^)(?=[A-Z])")
 
     def __init__(self, name: str, path: Path):
@@ -31,12 +32,12 @@ class ObjectTemplate(abc.ABC):
     @property
     def class_name(self) -> str:
         """Get the class name of the object."""
-        return self.name[0].upper() + self.name[1:]
+        return self.name[0].upper() + self.name[1:] + self._type
 
     @property
     def module_comment(self) -> str:
         """Get the module comment of the object."""
-        return f'"""Module containing the {self.class_name} object."""\n'
+        return f'"""Module containing the {self.class_name}."""\n'
 
     @abc.abstractmethod
     def imports(self) -> list[str]:

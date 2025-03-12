@@ -8,10 +8,12 @@ __all__ = ["ViewTemplate"]
 class ViewTemplate(ObjectTemplate):
     """Template for a new view."""
 
+    _type = "View"
+
     @property
     def class_comment(self) -> str:
         """Get the class comment of the view."""
-        return f'"""{self.class_name} view."""'
+        return f'"""{self.class_name}."""'
 
     @property
     def imports(self) -> str:
@@ -32,9 +34,9 @@ class ViewTemplate(ObjectTemplate):
                 f"\t{self.class_comment}\n",
                 "\t@classmethod",
                 "\tdef valid_layout(cls, id: str, **kwargs):",
-                f'\t\t"""Render valid layout for the {self.class_name} view."""',
+                f'\t\t"""Render valid layout for the {self.class_name}."""',
                 "\t\tweb_id = cls.id(id)",
-                f'\t\treturn dmc.Text("This is the {self.class_name} view.", id=web_id)\n',
+                f'\t\treturn dmc.Text("This is the {self.class_name}.", id=web_id)\n',
             ]
         )
 

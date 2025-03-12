@@ -1,7 +1,6 @@
-"""Module containing the templates for building project files."""
+"""Module containing templates for new object modules."""
 
-from .app_template import AppTemplate
-from .homepage_template import HomepageTemplate
-from .not_found_404_template import NotFound404Template
+from .page_template import PageTemplate
+from .view_template import ViewTemplate
 
-__all__ = ["AppTemplate", "HomepageTemplate", "NotFound404Template"]
+__all__ = ["ViewTemplate", "PageTemplate"]

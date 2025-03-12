@@ -33,4 +33,4 @@ def test_abstract_view_raises():
 
 def test_abstract_create_raises():
     with pytest.raises(NotImplementedError):
-        DashView.create("test-id")
+        DashView.valid_layout("test-id")

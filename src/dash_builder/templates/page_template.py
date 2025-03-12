@@ -60,6 +60,7 @@ class PageTemplate(ObjectTemplate):
         return "\n".join(
             [
                 "\ndef layout(**kwargs):",
+                f'\t"""Render valid layout for the {self.class_name}."""',
                 f"\treturn {self.class_name}.layout(**kwargs)\n",
             ]
         )

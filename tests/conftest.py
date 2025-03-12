@@ -15,7 +15,7 @@ def runner() -> CliRunner:
 def test_view() -> type[DashView]:
     class TestView(DashView):
         @classmethod
-        def create(cls, id: str, **kwargs):
+        def layout(cls, id: str, **kwargs):
             return []
 
     return TestView

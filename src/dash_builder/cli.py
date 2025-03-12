@@ -1,50 +1,68 @@
 """Module containing the main `typer` CLI for managing dash projects."""
 
 import pathlib
-import typing
+import re
+import shutil
 from pathlib import Path
 
 import typer
 from rich.console import Console
 from rich.markup import escape
-from rich.progress import BarColumn, MofNCompleteColumn, Progress, TextColumn
+from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.text import Text
 from rich.tree import Tree
+from typing_extensions import Annotated
 
-from .templates import AppTemplate, HomepageTemplate, NotFound404Template
-
-if typing.TYPE_CHECKING:
-    from .templates._base_template import BaseTemplate
+from .templates import PageTemplate, ViewTemplate
 
 app: typer.Typer = typer.Typer()
 """The `typer.Typer` applicaiton object."""
 
 
-class ProjectInitiator:
+class Project:
     """Object to capture and process project initiation options and logic."""
 
-    def __init__(self, name: str, location: str, **kwargs):
+    def __init__(self, name: str, template: str, location: str, **kwargs):
         """Create project initiation class.
 
         Args:
             name: the name of the project (used for the project directory).
+            template: the template to use for the project.
             location: the destination directory for the project.
             **kwargs: additional keyword arguments.
 
         """
         self.console: Console = Console()
         """`rich.Console` object for printing to stdout."""
-        self.name: str = name
+        self.name: str = name.replace(" ", "-")
         """Project name."""
+        self._template: str = template
+        """Project template."""
         self._location: str = location
         """Project destination directory."""
 
-        self.templates: "list[type[BaseTemplate]]" = [
-            AppTemplate,
-            HomepageTemplate,
-            NotFound404Template,
-        ]
-        """List of template files to create as part of the project."""
+    @classmethod
+    def detect(cls) -> "Project":
+        """Detect the project from the current directory."""
+        cwd: Path = Path.cwd() / ".testproject"
+        app = cwd / "app.py"
+        views = cwd / "views"
+        pages = cwd / "pages"
+        test = (
+            app.exists()
+            and views.exists()
+            and pages.exists()
+            and views.is_dir()
+            and pages.is_dir()
+        )
+        if not test:
+            raise ValueError("No app.py found in the current directory.")
+        return cls(name=cwd.name, template="basic-mantine", location=cwd.parent)
+
+    @property
+    def template(self) -> Path:
+        """Template directory."""
+        return Path(__file__).parent / "examples" / self._template
 
     @property
     def location(self) -> Path:
@@ -59,7 +77,7 @@ class ProjectInitiator:
     def spinner(self, **kwargs):
         """Customised `rich.Progress` bar."""
         fmt: str = "[progress.description]{task.description}"
-        return Progress(MofNCompleteColumn(), BarColumn(), TextColumn(fmt), **kwargs)
+        return Progress(SpinnerColumn(), TextColumn(fmt), **kwargs)
 
     def print_completion(self):
         """Print confirmation of project initiation."""
@@ -69,7 +87,7 @@ class ProjectInitiator:
 
     def check_if_app_exists(self) -> bool:
         """Check if the `app.py` file already exists."""
-        app_path = self.project / AppTemplate.path
+        app_path = self.project / "app.py"
         if app_path.exists():
             warning = "[bold red]FAILED[/bold red]"
             warning += (
@@ -80,19 +98,8 @@ class ProjectInitiator:
             return True
         return False
 
-    def create_file_from_template(self, template: "type[BaseTemplate]"):
-        """Create a projet file from a template."""
-        file_path = self.project / template.path
-        parent = file_path.parent
-        if not parent.exists():
-            parent.mkdir(exist_ok=True, parents=True)
-        if not file_path.exists():
-            file_path.write_text(template.content())
-
     def _TEMP_REMOVE_PROJECT(self):
         if self.project.exists():
-            import shutil
-
             self.console.print(f"[bold red]DELETING {self.project}[/bold red]")
             shutil.rmtree(self.project)
 
@@ -127,42 +134,142 @@ class ProjectInitiator:
         self.walk_directory(path, tree)
         self.console.print(tree)
 
-    def run(self):
+    def build(self):
         """Run the project initiation."""
-        # self._TEMP_REMOVE_PROJECT()
+        if not self.template.exists() or not self.template.is_dir():
+            self.console.print(
+                f"[bold red]Error:[/bold red] Template '{self._template}' not found in examples."
+            )
+            return None
+        self._TEMP_REMOVE_PROJECT()
         already_exists = self.check_if_app_exists()
         if already_exists:
             return None
-        with self.spinner(console=self.console) as progress:
-            task = progress.add_task("Creating project", total=len(self.templates))
-            for template in self.templates:
-                progress.update(task, description=f"Creating {template.path}")
-                self.create_file_from_template(template)
-                progress.update(task, advance=1)
-            progress.update(task, description="Complete")
+        with self.spinner(console=self.console, transient=True) as progress:
+            progress.add_task("Creating project")
+            to_ignore = shutil.ignore_patterns("__pycache__", "*.pyc")
+            output = shutil.copytree(self.template, self.project, ignore=to_ignore)
         self.print_completion()
-        self.print_tree(self.project)
+        self.print_tree(output.absolute())
+
+    def create_new_view_module(self, template: ViewTemplate):
+        """Create a new view module."""
+        template.file_path.write_text(template.file_content)
+
+    def create_new_page_module(self, template: PageTemplate):
+        """Create a new page module."""
+        template.file_path.write_text(template.file_content)
+
+    def add_view_import_to_init_file(self, template: ViewTemplate):
+        """Add a view import to the init file."""
+        init_file = template.file_path.parent / "__init__.py"
+        module_name = template.file_name.strip(".py")
+        if not init_file.exists():
+            init_file.write_text('"""Views module."""\n\n__all__ = []\n')
+
+        content = init_file.read_text()
+        import_line = f"from .{module_name} import {template.class_name}\n"
+        if import_line in content:
+            self.console.print(
+                f"[bold red]WARNING[/bold red] {template.class_name} already imported."
+            )
+            return
+
+        # Insert import before __all__ using regex
+        content = re.sub(
+            r"(.*?)(\n__all__\s*=\s*\[.*?\])",
+            f"\\1{import_line}\\2",
+            content,
+            flags=re.DOTALL,
+        )
+
+        # Add class to __all__ list using regex
+        content = re.sub(
+            r"(__all__\s*=\s*\[)(.*?)(\])",
+            lambda m: f'{m.group(1)}{m.group(2)}{", " if m.group(2) else ""}"{template.class_name}"{m.group(3)}',
+            content,
+        )
+        init_file.write_text(content)
+
+    def add_view(self, view_name: str):
+        """Add a new view to the project."""
+        view_path = self.project / "views"
+        template = ViewTemplate(view_name, view_path)
+        if template.file_path.exists():
+            self.console.print(
+                f"[bold red]ERROR[/bold red] View '{template.file_name}' already exists."
+            )
+            return None
+
+        self.create_new_view_module(template)
+        self.add_view_import_to_init_file(template)
+        self.console.print(
+            f"[bold green]CREATED[/bold green] {template.class_name} view."
+        )
+
+    def add_page(self, page_name: str, url_path: str):
+        """Add a new page to the project."""
+        page_path = self.project / "pages"
+        template = PageTemplate(page_name, page_path, url_path)
+        if template.file_path.exists():
+            self.console.print(
+                f"[bold red]ERROR[/bold red] Page '{template.file_name}' already exists."
+            )
+            return None
+
+        self.create_new_page_module(template)
+        self.console.print(
+            f"[bold green]CREATED[/bold green] {template.class_name} page."
+        )
 
 
-@app.command("init-project")
-def init_project(project_name: str, location: str = "."):
+@app.command("build")
+def build(
+    project_name: Annotated[str, typer.Argument(help="The name of the project.")],
+    template: Annotated[
+        str, typer.Argument(help="The template to use for the project.")
+    ] = "basic-mantine",
+    location: Annotated[
+        str, typer.Option(help="The destination directory for the project.")
+    ] = ".",
+):
     """Initialise a new Dash Builder project.
 
     Args:
         project_name: the name of the project (used for the project directory).
+        template: the template to use for the project.
         location: the destination directory for the project.
 
     """
-    initiator = ProjectInitiator(project_name, location)
-    initiator.run()
+    initiator = Project(project_name, template, location)
+    initiator.build()
 
 
-@app.command("add-page")
-def add_page(page_name: str):
+@app.command("view")
+def create_view(
+    view_name: Annotated[str, typer.Argument(help="The name of the view to add.")],
+):
+    """Add a new view to the project.
+
+    Args:
+        view_name: the name of the view to add.
+
+    """
+    project = Project.detect()
+    project.add_view(view_name)
+
+
+@app.command("page")
+def create_page(
+    page_name: Annotated[str, typer.Argument(help="The name of the page to add.")],
+    url_path: Annotated[str, typer.Option(help="The URL path of the page.")] = None,
+):
     """Add a new page to the project.
 
     Args:
         page_name: the name of the page to add.
+        url_path: the URL path of the page.
 
     """
-    typer.echo(page_name)
+    project = Project.detect()
+    project.add_page(page_name, url_path)

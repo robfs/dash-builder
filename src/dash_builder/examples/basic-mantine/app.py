@@ -1,3 +1,5 @@
+"""Basic Mantine app."""
+
 from typing import Any
 
 import dash
@@ -15,6 +17,8 @@ app: dash.Dash = dash.Dash(
 
 
 class App(DashPage):
+    """Application constructor."""
+
     theme: dict[dict, Any] = {
         "scale": 1,
         "fontSmoothing": True,

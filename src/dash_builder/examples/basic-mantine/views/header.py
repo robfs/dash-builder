@@ -11,6 +11,7 @@ class HeaderView(DashView):
 
     @classmethod
     def logo(cls, id: str):
+        """Logo."""
         return dmc.Group(
             [
                 dmc.Image(
@@ -24,6 +25,7 @@ class HeaderView(DashView):
 
     @classmethod
     def nav_links(cls, id: str):
+        """Nav links."""
         return dmc.Group(
             [
                 dmc.NavLink(label=page["name"], href=page["path"])

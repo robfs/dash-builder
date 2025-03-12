@@ -268,6 +268,7 @@ def create_page(
 
     Args:
         page_name: the name of the page to add.
+        url_path: the URL path of the page.
 
     """
     project = Project.detect()

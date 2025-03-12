@@ -13,6 +13,7 @@ class PageTemplate(ObjectTemplate):
     _type = "Page"
 
     def __init__(self, page_name: str, page_path: Path, url_path: str | None = None):
+        """Initialise the PageTemplate."""
         super().__init__(page_name, page_path)
         self.url_path: str | None = url_path
 

@@ -169,7 +169,7 @@ class Project:
     def add_view_import_to_init_file(self, template: ViewTemplate):
         """Add a view import to the init file."""
         init_file = template.file_path.parent / "__init__.py"
-        module_name = template.file_name.strip(".py")
+        module_name = template.file_name.replace(".py", "")
         if not init_file.exists():
             init_file.write_text('"""Views module."""\n\n__all__ = []\n')
 

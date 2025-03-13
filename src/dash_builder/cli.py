@@ -42,9 +42,12 @@ class Project:
         """Project destination directory."""
 
     @classmethod
-    def detect(cls) -> "Project":
+    def detect(cls, location: str) -> "Project":
         """Detect the project from the current directory."""
-        cwd: Path = Path.cwd() / ".testproject"
+        if location:
+            cwd: Path = Path(location)
+        else:
+            cwd = Path.cwd()
         app = cwd / "app.py"
         views = cwd / "views"
         pages = cwd / "pages"
@@ -248,14 +251,18 @@ def build(
 @app.command("view")
 def create_view(
     view_name: Annotated[str, typer.Argument(help="The name of the view to add.")],
+    location: Annotated[
+        str, typer.Option(help="The destination directory for the project.")
+    ] = "",
 ):
     """Add a new view to the project.
 
     Args:
         view_name: the name of the view to add.
+        location: the destination directory for the project.
 
     """
-    project = Project.detect()
+    project = Project.detect(location=location)
     project.add_view(view_name)
 
 

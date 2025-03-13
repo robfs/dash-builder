@@ -75,7 +75,9 @@ class Project:
     @property
     def project(self) -> Path:
         """Project directory."""
-        return self.location / self.name
+        if self.name:
+            return self.location / self.name
+        return self.location
 
     def spinner(self, **kwargs):
         """Customised `rich.Progress` bar."""
@@ -144,14 +146,15 @@ class Project:
                 f"[bold red]Error:[/bold red] Template '{self._template}' not found in examples."
             )
             return None
-        self._TEMP_REMOVE_PROJECT()
         already_exists = self.check_if_app_exists()
         if already_exists:
             return None
         with self.spinner(console=self.console, transient=True) as progress:
             progress.add_task("Creating project")
             to_ignore = shutil.ignore_patterns("__pycache__", "*.pyc")
-            output = shutil.copytree(self.template, self.project, ignore=to_ignore)
+            output = shutil.copytree(
+                self.template, self.project, ignore=to_ignore, dirs_exist_ok=True
+            )
         self.print_completion()
         self.print_tree(output.absolute())
 
@@ -228,7 +231,7 @@ class Project:
 
 @app.command("build")
 def build(
-    project_name: Annotated[str, typer.Argument(help="The name of the project.")],
+    project_name: Annotated[str, typer.Argument(help="The name of the project.")] = "",
     template: Annotated[
         str, typer.Argument(help="The template to use for the project.")
     ] = "basic-mantine",

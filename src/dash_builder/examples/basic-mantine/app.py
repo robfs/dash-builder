@@ -5,9 +5,9 @@ from typing import Any
 import dash
 import dash_mantine_components as dmc
 from typing_extensions import override
-from views import FooterView, HeaderView, SidebarView
 
 from dash_builder import DashPage
+from views import FooterView, HeaderView, SidebarView
 
 dash._dash_renderer._set_react_version("18.2.0")
 

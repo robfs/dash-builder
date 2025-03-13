@@ -9,22 +9,22 @@ A tool and framework to simplify construction of Python Dash applications.
 
 * Create a project in the current working directory
 ```bash
-> dashb create testproject
+> dash build
 ```
 
-* Create project in specified directory
+* Create project called `testproject` in specified directory
 ```bash
-> dashb create testproject --location ~/projects
+> dash build testproject --location ~/projects
 ```
 
 * Add new page to current dash project in pages/ directory
 ```bash
-> dashb page NewPage
+> dash page NewPage
 ```
 
 * Add new page to current dash project in specific directory within pages/
 ```bash
-> dashb page NewPage --location archive
+> dash page NewPage --location archive
 ```
 
 ## Installation

@@ -28,6 +28,7 @@ venv = ".venv"
 [dependency-groups]
 dev = [
  "mkdocs>=1.6.1",
+ "mkdocs-material>=9.6.9",
  "pytest>=8.3.4",
  "pytest-cov>=6.0.0",
  "ruff>=0.9.7",

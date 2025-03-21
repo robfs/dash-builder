@@ -4,10 +4,11 @@ from typing import Any
 
 import dash
 import dash_mantine_components as dmc
+from dash import dcc
 from typing_extensions import override
-from views import FooterView, HeaderView, SidebarView
 
 from dash_builder import DashPage
+from views import FooterView, HeaderView, SidebarView
 
 dash._dash_renderer._set_react_version("18.2.0")
 
@@ -293,6 +294,7 @@ class App(DashPage):
                 SidebarView.layout("sidebar"),
                 dmc.AppShellMain(dash.page_container),
                 FooterView.layout("footer"),
+                dcc.Location(id="url"),
             ],
             header={"height": 60},
             footer={"height": 30},

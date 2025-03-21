@@ -4,6 +4,7 @@ import abc
 import re
 import traceback
 
+import dash_mantine_components as dmc
 from dash import html
 
 __all__ = ["DashObject"]
@@ -54,7 +55,14 @@ class DashObject(abc.ABC):
             `dash.html.Div` container.
 
         """
-        return html.Div(html.Pre(message))
+        return dmc.Container(
+            dmc.Code(
+                message,
+                block=True,
+                color="var(--mantine-color-red-2)",
+                style={"whiteSpace": "pre-wrap"},
+            )
+        )
 
     @classmethod
     @abc.abstractmethod

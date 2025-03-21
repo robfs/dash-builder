@@ -4,11 +4,7 @@ name: Deploy static content to Pages
 on:
   release:
     types: [published]
-  push:
-    branches: [feature/docstrings]
-    # Alternative: only build for tags.
-    # tags:
-    #   - '*'
+  workflow_dispatch:
 
 # security: restrict permissions for CI jobs.
 permissions:

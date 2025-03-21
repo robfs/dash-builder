@@ -169,7 +169,7 @@ class Project:
     def add_view_import_to_init_file(self, template: ViewTemplate):
         """Add a view import to the init file."""
         init_file = template.file_path.parent / "__init__.py"
-        module_name = template.file_name.strip(".py")
+        module_name = template.file_name.replace(".py", "")
         if not init_file.exists():
             init_file.write_text('"""Views module."""\n\n__all__ = []\n')
 
@@ -213,7 +213,7 @@ class Project:
             f"[bold green]CREATED[/bold green] {template.class_name} view."
         )
 
-    def add_page(self, page_name: str, url_path: str):
+    def add_page(self, page_name: str, url_path: str | None = None):
         """Add a new page to the project."""
         page_path = self.project / "pages"
         template = PageTemplate(page_name, page_path, url_path)
@@ -253,7 +253,9 @@ def build(
 
 @app.command("view")
 def create_view(
-    view_name: Annotated[str, typer.Argument(help="The name of the view to add.")],
+    view_names: Annotated[
+        list[str], typer.Argument(help="The name of the view(s) to add.")
+    ],
     location: Annotated[
         str, typer.Option(help="The destination directory for the project.")
     ] = "",
@@ -261,25 +263,47 @@ def create_view(
     """Add a new view to the project.
 
     Args:
-        view_name: the name of the view to add.
+        view_names: the name(s) of the view(s) to add.
         location: the destination directory for the project.
 
     """
     project = Project.detect(location=location)
-    project.add_view(view_name)
+
+    for view_name in view_names:
+        project.add_view(view_name)
 
 
 @app.command("page")
 def create_page(
-    page_name: Annotated[str, typer.Argument(help="The name of the page to add.")],
-    url_path: Annotated[str, typer.Option(help="The URL path of the page.")] = None,
+    page_names: Annotated[
+        list[str], typer.Argument(help="The name of the page(s) to add.")
+    ],
+    location: Annotated[
+        str, typer.Option(help="The destination directory for the project.")
+    ] = "",
+    url_path: Annotated[
+        str,
+        typer.Option(
+            help="The URL path of the page. Only available for single page creation."
+        ),
+    ] = None,
 ):
     """Add a new page to the project.
 
     Args:
-        page_name: the name of the page to add.
-        url_path: the URL path of the page.
+        page_names: the name of the page to add.
+        location: the destination directory for the project.
+        url_path: the URL path of the page. Only available for single page creation.
 
     """
-    project = Project.detect()
-    project.add_page(page_name, url_path)
+    project = Project.detect(location=location)
+    if len(page_names) > 1:
+        if url_path:
+            project.console.print(
+                "[bold red]ERROR[/bold red] URL path is only available for single page creation."
+            )
+            return
+        for page_name in page_names:
+            project.add_page(page_name)
+    else:
+        project.add_page(page_names[0], url_path)

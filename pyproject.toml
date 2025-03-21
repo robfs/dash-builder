@@ -26,7 +26,15 @@ venvPath = "."
 venv = ".venv"
 
 [dependency-groups]
-dev = ["pdoc>=15.0.1", "pytest>=8.3.4", "pytest-cov>=6.0.0", "ruff>=0.9.7"]
+dev = [
+ "mkdocs>=1.6.1",
+ "mkdocs-material>=9.6.9",
+ "mkdocstrings-python>=1.16.7",
+ "pytest>=8.3.4",
+ "pytest-cov>=6.0.0",
+ "ruff>=0.9.7",
+ "termynal>=0.13.0",
+]
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.

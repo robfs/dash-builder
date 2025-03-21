@@ -24,16 +24,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version-file: ".python-version"
-
-      # ADJUST THIS: install all dependencies (including pdoc)
       - run: uv sync --all-extras --dev
-      # ADJUST THIS: build your documentation into docs/.
-      # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
-      - run: uv run pdoc src/dash_builder -o docs/
+      - run: uv run mkdocs build
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/
+          path: site/
 
   # Deploy the artifact to GitHub pages.
   # This is a separate job so that only actions/deploy-pages has the necessary permissions.

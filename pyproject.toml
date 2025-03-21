@@ -1,6 +1,6 @@
 [project]
 name = "dash-builder"
-version = "0.1.4"
+version = "0.1.5"
 description = "A tool and framework to simplify construction of Python Dash applications."
 readme = "README.md"
 authors = [{ name = "robfs", email = "robfoxsimms@gmail.com" }]
@@ -27,13 +27,13 @@ venv = ".venv"
 
 [dependency-groups]
 dev = [
- "mkdocs>=1.6.1",
- "mkdocs-material>=9.6.9",
- "mkdocstrings-python>=1.16.7",
- "pytest>=8.3.4",
- "pytest-cov>=6.0.0",
- "ruff>=0.9.7",
- "termynal>=0.13.0",
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.6.9",
+    "mkdocstrings-python>=1.16.7",
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.9.7",
+    "termynal>=0.13.0",
 ]
 
 [tool.ruff]

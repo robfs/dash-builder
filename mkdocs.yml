@@ -9,6 +9,16 @@ repo_url: https://github.com/robfs/dash-builder
 theme:
   features:
     - navigation.footer
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.preview
+    - navigation.instant.progress
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.path
+    - navigation.top
+    - navigation.tracking
   icon:
     logo: material/view-dashboard-edit-outline
     repo: fontawesome/brands/github

@@ -17,6 +17,9 @@ theme:
         name: Light mode
       primary: teal
       accent: indigo
+  font:
+    text: Quicksand
+    code: Source Code Pro
 
 plugins:
   - termynal

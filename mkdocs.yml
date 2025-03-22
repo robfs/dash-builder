@@ -1,6 +1,23 @@
 site_name: My Docs
 theme:
   name: material
+  palette:
+    # Dark Mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Dark mode
+      primary: teal
+      accent: indigo
+
+    # Light Mode
+    - scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Light mode
+      primary: teal
+      accent: indigo
+
 plugins:
   - termynal
   - mkdocstrings

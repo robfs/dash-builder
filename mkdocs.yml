@@ -4,11 +4,14 @@ site_name: My Docs
 #   social:
 #     - icon: simple/youtube
 #       link: https://youtube.com/
+repo_name: robfs/dash-builder
+repo_url: https://github.com/robfs/dash-builder
 theme:
   features:
     - navigation.footer
   icon:
     logo: material/view-dashboard-edit-outline
+    repo: fontawesome/brands/github
   favicon: assets/favicon.ico
   name: material
   palette:

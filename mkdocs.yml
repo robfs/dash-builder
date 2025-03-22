@@ -1,5 +1,7 @@
 site_name: My Docs
 theme:
+  features:
+    - navigation.footer
   icon:
     logo: material/view-dashboard-edit-outline
   favicon: assets/favicon.ico

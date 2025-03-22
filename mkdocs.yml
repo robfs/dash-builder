@@ -1,5 +1,9 @@
 site_name: My Docs
 copyright: Copyright &copy; 2024 Rob Fox
+extra:
+  social:
+    - icon: simple/youtube
+      link: https://youtube.com/
 theme:
   features:
     - navigation.footer

@@ -8,6 +8,9 @@ repo_name: robfs/dash-builder
 repo_url: https://github.com/robfs/dash-builder
 theme:
   features:
+    - content.code.annotate
+    - content.code.copy
+    - content.code.select
     - navigation.footer
     - navigation.instant
     - navigation.instant.prefetch

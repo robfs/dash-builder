@@ -1,5 +1,8 @@
 site_name: My Docs
 theme:
+  icon:
+    logo: material/view-dashboard-edit-outline
+  favicon: assets/favicon.ico
   name: material
   palette:
     # Dark Mode

@@ -16,7 +16,7 @@ from typing_extensions import Annotated
 from .templates import PageTemplate, ViewTemplate
 
 app: typer.Typer = typer.Typer()
-"""The `typer.Typer` applicaiton object."""
+"""The `typer.Typer` application object."""
 
 
 class Project:
@@ -229,8 +229,8 @@ class Project:
         )
 
 
-@app.command("build")
-def build(
+@app.command("init")
+def init(
     project_name: Annotated[str, typer.Argument(help="The name of the project.")] = "",
     template: Annotated[
         str, typer.Argument(help="The template to use for the project.")

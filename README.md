@@ -9,12 +9,12 @@ A tool and framework to simplify construction of Python Dash applications.
 
 * Create a project in the current working directory
 ```bash
-> dash build
+> dash init
 ```
 
 * Create project called `testproject` in specified directory
 ```bash
-> dash build testproject --location ~/projects
+> dash init testproject --location ~/projects
 ```
 
 * Add new page to current dash project in pages/ directory
